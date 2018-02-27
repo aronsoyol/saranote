@@ -138,7 +138,7 @@ function printDoc() {
 <!-- <div id="wrap"> -->
 
 
-<div id="textBox" contenteditable="true" class="mon"></div>
+<div id="textBox" contenteditable="true" class="mon">1111<p>2222</p><p>3333</p><p>4444</p></div>
 <!-- </div> -->
 </body>
 
@@ -164,37 +164,119 @@ function printDoc() {
   }
 </script>
 <script>
-  'use strict';
+  // 'use strict';
 
-  const electron = require('electron');
-  const ipcRenderer = electron.ipcRenderer;
-  // window.addEventListener('click', function() {
-  //   quote.innerHTML = quotes[Math.floor(Math.random() * quotes.length)];
+  // const electron = require('electron');
+  // const ipcRenderer = electron.ipcRenderer;
+  // // window.addEventListener('click', function() {
+  // //   quote.innerHTML = quotes[Math.floor(Math.random() * quotes.length)];
+  // // });
+
+  // ipcRenderer.on('set_bgcolor', function(event, color) {
+  //   document.body.style.backgroundColor = color;
+  //   console.log(color);
   // });
 
-  ipcRenderer.on('set_bgcolor', function(event, color) {
-    document.body.style.backgroundColor = color;
-    console.log(color);
-  });
+  // ipcRenderer.on('cut_text', function(event) {
+  //   formatDoc('cut');
+  // });
+  // ipcRenderer.on('copy_text', function(event) {
+  //   formatDoc('copy');
+  // });
+  // ipcRenderer.on('paste_text', function(event) {
+  //   formatDoc('paste');
+  // });
+  // ipcRenderer.on('select_all', function(event) {
+  //   formatDoc('selectAll');
+  // });
+  // ipcRenderer.on('undo', function(event) {
+  //   formatDoc('undo');
+  // });
 
-  ipcRenderer.on('cut_text', function(event) {
-    formatDoc('cut');
-  });
-  ipcRenderer.on('copy_text', function(event) {
-    formatDoc('copy');
-  });
-  ipcRenderer.on('paste_text', function(event) {
-    formatDoc('paste');
-  });
-  ipcRenderer.on('select_all', function(event) {
-    formatDoc('selectAll');
-  });
-  ipcRenderer.on('undo', function(event) {
-    formatDoc('undo');
-  });
+  // ipcRenderer.on('redo', function(event) {
+  //   formatDoc('redo');
+  // });
 
-  ipcRenderer.on('redo', function(event) {
-    formatDoc('redo');
-  });
+//   document.addEventListener('keydown', (event) => {
+//     const keyName = event.key;
+
+//     // ユーザが　Ctrl キーから指を離した時点で、キーはアクティブではなくなります。
+//     // そのため event.ctrlKey は false　が返ります。
+//     console.log(keyName)
+//     if(keyName === "ArrowUp"){
+//       // デフォルトの動作を無効化する
+//       // 
+//       document.dispatchEvent(new KeyboardEvent("keydown",{
+//         key: "ArrowLeft"}));
+
+//       event.preventDefault();
+//     }else{
+//       // デフォルトの動作を無効化する（非標準）
+//       event.keyCode = 0;
+//       return false;
+//     }
+// }, false);
+function moveCaret(win, charCount) {
+  var sel, range;
+  if (win.getSelection) {
+    sel = win.getSelection();
+    var selRange = sel.getRangeAt(0);
+    child = document.getElementById("textBox").childNodes;
+    // console.log(selRange);
+    var currentNodeID = -1
+    for (var i = 0; i < child.length; i++)
+    {
+      // console.log(child[i]);
+      if(child[i].firstChild === sel.focusNode || child[i] === sel.focusNode)
+      {
+        currentNodeID = i;
+      }
+    }
+    // console.log(sel.focusNode)
+    if (sel.rangeCount > 0) {
+      var textNode = sel.focusNode;
+      var newOffset = sel.focusOffset + charCount;
+      if (newOffset == -1 && currentNodeID>0)
+      {
+        textNode= child[currentNodeID-1].firstChild || child[currentNodeID-1];
+        newOffset =textNode.length;
+        // console.log(currentNodeID);
+
+      }
+      if(newOffset >textNode.length && currentNodeID<child.length-1)
+      {
+        textNode= child[currentNodeID+1].firstChild || child[currentNodeID-1];
+        newOffset =0;
+      }
+      try{
+        sel.collapse(textNode, Math.max(0, Math.min(textNode.length, newOffset)));
+        // console.log(sel)
+      }
+      catch(e)
+      {
+        console.log(e) // 例外オブジェクトをエラー処理部分に渡す
+      }
+    }
+  } 
+  else if ( (sel = win.document.selection) ) 
+  {
+    if (sel.type != "Control") {
+      range = sel.createRange();
+      range.move("character", charCount);
+      range.select();
+    }
+  }
+}
+document.addEventListener("keydown", function (e) { 
+  
+  if(e.key=="ArrowDown")
+  {
+    e.preventDefault();
+    moveCaret(window, 1);
+  }else if (e.key=="ArrowUp"){
+    e.preventDefault();
+    moveCaret(window, -1);
+  }
+});
 </script>
 </html>
