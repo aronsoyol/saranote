@@ -219,9 +219,9 @@ function printDoc() {
 function moveCaret(win, charCount) {
   var sel, range;
   if (win.getSelection) {
-    sel = win.getSelection();
+    var sel = win.getSelection();
     var selRange = sel.getRangeAt(0);
-    child = document.getElementById("textBox").childNodes;
+    var child = document.getElementById("textBox").childNodes;
     // console.log(selRange);
     var currentNodeID = -1
     for (var i = 0; i < child.length; i++)
@@ -236,16 +236,16 @@ function moveCaret(win, charCount) {
     if (sel.rangeCount > 0) {
       var textNode = sel.focusNode;
       var newOffset = sel.focusOffset + charCount;
-      if (newOffset == -1 && currentNodeID>0)
+      if (newOffset == -1 && currentNodeID > 0)
       {
-        textNode= child[currentNodeID-1].firstChild || child[currentNodeID-1];
-        newOffset =textNode.length;
+        textNode = child[currentNodeID - 1].firstChild || child[currentNodeID - 1];
+        newOffset = textNode.length;
         // console.log(currentNodeID);
 
       }
-      if(newOffset >textNode.length && currentNodeID<child.length-1)
+      if(newOffset > textNode.length && currentNodeID<child.length - 1)
       {
-        textNode= child[currentNodeID+1].firstChild || child[currentNodeID-1];
+        textNode= child[currentNodeID + 1].firstChild || child[currentNodeID - 1];
         newOffset =0;
       }
       try{
