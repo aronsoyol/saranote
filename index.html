@@ -125,9 +125,10 @@
                 console.log(j_data);
                 editor.setContent(j_data);
                 // alert("ddd");
-                $("#image").attr("src", "jpg/" + page_num +".jpg");
+
             }
         });
+        $("#image").attr("src", "jpg/" + page_num +".jpg");
       },
       values: pages,
       onPostRender: function () {
