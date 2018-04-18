@@ -8,7 +8,7 @@
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <style type="text/css">
       html, body, #editor { height: 100%; margin: 0;}
-      .mce-edit-area {display:flex !important;flex-flow:column;}
+      .mce-edit-area {display:flex !important;flex-flow:column;} */
       .mce-edit-area iframe {flex:1 1 auto;}
       .mce-tinymce {height:100%;}
       .mce-tinymce.mce-container { width:100%;height:100%;border:0; }
@@ -17,30 +17,7 @@
       .mce-stack-layout-item{  flex: 0 0 auto;}
       .mce-edit-area{flex:1 1 auto;}
 
-      #container {
-          display: grid;
-          height: 100%;
-          width: 100%;
-          grid-gap: 2px;
-          grid-template-columns: repeat(2, 1fr);
-          grid-auto-rows: minmax(100px, auto);
-      }
-      #container>div{
-        background-color: rgb(176, 162, 70);
 
-      }
-      #left {
-        grid-row: 1 / 2;
-        grid-column: 1;
-      }
-      #right{
-        grid-row: 1 / 2;
-        grid-column: 2;
-      }
-      #right>img{
-        height: 100%;
-        width: 100%;
-      }
     </style>
   </head>
   <body>
@@ -48,20 +25,17 @@
 
 <!-- <img src="file:///Users/aron/ITAD/150.jpg" alt=""> -->
 
+  <div class="tinymce-full"> </div>
 
-  <div id="container"> <!-- コンテナ -->
-      <div id="left"><div class="tinymce-full"> </div></div> <!-- アイテム -->
-      <div id="right"><img id="image" src="jpg/001.jpg" alt=""> </div> <!-- アイテム -->
-  </div>
 
   </body>
 
   <script>
 
   var pages=[];
-  for (i = 0; i< 160; i++)
+  for (i = 0; i< 150; i++)
   {
-    pages.push({text:"page" + (i+1), value:(i+1)})
+    pages.push({text:"page" + i, value:i})
   }
     // You can also require other files to run in this process
   tinymce.init({
@@ -110,14 +84,10 @@
       icon: false,
       onselect: function (e) {
         // editor.insertContent(this.value());
-        var page_num = this.value();
-        page_num = "000" + page_num;
-        page_num= page_num.slice(-3);
-
         $.ajax({
             type: "GET",
-            url: "http://0.0.0.0:5000/post/"+page_num,
-            data: null,
+            url: "http://0.0.0.0:5000/post/"+this.value(),
+            data: {data:"sss" },
             success: function(j_data){
                 // 処理を記述
                 // al
@@ -125,7 +95,7 @@
                 console.log(j_data);
                 editor.setContent(j_data);
                 // alert("ddd");
-                $("#image").attr("src", "jpg/" + page_num +".jpg");
+
             }
         });
       },
