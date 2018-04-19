@@ -57,7 +57,7 @@
   </body>
 
   <script>
-
+  var page_num = "001";
   var pages=[];
   for (i = 0; i< 160; i++)
   {
@@ -87,19 +87,22 @@
         icon: false,
         onclick: function () {
           var content = editor.getContent({format: 'text'});
-          console.log(content)
+          console.log(content);
+          page_num = "000" + page_num;
+          page_num = page_num.slice(-3);
+
           $.ajax({
               type: "POST",
-              url: "http://0.0.0.0:5000/post/111",
+              url: "www.delehi.net/chulapp/post/" + page_num,
               data: {
-                  "content": content,
-                  "title":001
+                  "content": content
+                  // "title":page_num
               },
               success: function(j_data){
                   // 処理を記述
                   // al
                   console.log(j_data);
-                  alert("ss");
+                  // alert("ss");
               }
           });
         }
@@ -110,13 +113,13 @@
       icon: false,
       onselect: function (e) {
         // editor.insertContent(this.value());
-        var page_num = this.value();
-        page_num = "000" + page_num;
+
+        page_num = "000" + this.value();
         page_num= page_num.slice(-3);
 
         $.ajax({
             type: "GET",
-            url: "http://0.0.0.0:5000/post/"+page_num,
+            url: "www.delehi.net/chulapp/post/" + page_num,
             data: null,
             success: function(j_data){
                 // 処理を記述
