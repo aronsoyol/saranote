@@ -1,0 +1,103 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+
+	<title>Layout Container</title>
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<link rel="stylesheet" href="https://jqueryui.com//resources/demos/style.css">
+
+	<link type="text/css" rel="stylesheet" href="lib/css/layout-default-latest.css" />
+	<style type="text/css">
+	/* html, body, #editor { height: 100%; margin: 0;} */
+	.mce-edit-area {display:flex !important;flex-flow:column;}
+	.mce-edit-area iframe {flex:1 1 auto;}
+	.mce-tinymce {height:100%;}
+	.mce-tinymce.mce-container { width:100%;height:100%;border:0; }
+	.mce-panel{border:0}
+	.mce-container-body.mce-stack-layout {display: flex; flex-flow: column;height: 100%;} */
+	.mce-stack-layout-item{  flex: 0 0 auto;}
+	.mce-edit-area{flex:1 1 auto;}
+	html, body {
+		background:	#666;
+		width:		100%;
+		height:		100%;
+		padding:	0;
+		margin:		0;
+		overflow:	auto; /* when page gets too small */
+	}
+	#container {
+		background:	#999;
+		height:		100%;
+		margin:		0 auto;
+		width:		100%;
+		/* max-width:	900px; */
+		min-width:	700px;
+		_width:		700px; /* min-width for IE6 */
+	}
+	.pane {
+		display:	none; /* will appear when layout inits */
+	}
+	img{width: 100%;}
+	</style>
+	<script src="tinymce/tinymce.js"></script>
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<!-- <script type="text/javascript" src="/lib/js/jquery-latest.js"></script>
+	<script type="text/javascript" src="/lib/js/jquery-ui-latest.js"></script> -->
+	<script type="text/javascript" src="lib/js/jquery.layout-latest.js"></script>
+	<script type="text/javascript">
+
+
+	tinymce.init({
+	selector:'textarea.tinymce-full',
+	height: "100%",
+	indent: true,
+	theme_url: './mytheme.js',
+	toolbar1: 'formatselect | fontselect fontsizeselect | bold italic strikethrough forecolor backcolor  | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat',
+	toolbar2: 'image media link | table',
+	// menubar: false,
+	// content_css : "custom_content.css",
+	extended_valid_elements : "link[rel|href],a[class|name|href|target|title|onclick|rel],script[type|src],iframe[src|style|width|height|scrolling|marginwidth|marginheight|frameborder],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name]",
+	plugins: [
+		'advlist autolink lists link image charmap print hr anchor pagebreak',
+		'searchreplace wordcount visualblocks visualchars code fullscreen',
+		'insertdatetime media nonbreaking save table contextmenu directionality',
+		'emoticons template paste textcolor colorpicker textpattern codesample toc',
+		'fullpage preview'
+	],
+	font_formats:'ᠮᠣᠩᠭᠤᠯ ᠴᠠᠭᠠᠨ ᠲᠢᠭ᠌=mongolian white,serif;Andale Mono=andale mono,times;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier;Georgia=georgia,palatino;Helvetica=helvetica;Impact=impact,chicago;Symbol=symbol;Tahoma=tahoma,arial,helvetica,sans-serif;Terminal=terminal,monaco;Times New Roman=times new roman,times;Trebuchet MS=trebuchet ms,geneva;Verdana=verdana,geneva;Webdings=webdings;Wingdings=wingdings,zapf dingbats',
+	file_picker_types: 'image',
+	// and here's our custom image picker
+	file_picker_callback: function(cb, value, meta) {
+		dialog.showOpenDialog({
+			properties: ["openFile"],
+			filters: [{name: 'Images', extensions: ['jpg', 'png', 'gif', 'svg']}],
+			defaultPath: working_directory
+		}, function(fn) {
+			var filename = path.basename(fn[0]);
+			var rel_filename = path.relative(working_directory || "", fn[0]);
+			cb(rel_filename, { title: filename});
+		});
+	}
+	});
+
+	$(document).ready(function () {
+		$('#container').layout();
+	});
+	</script>
+
+</head>
+<body>
+<div id="container">
+	<div class="pane ui-layout-center">
+		<img src="file:///Users/aron/ITAD/150.jpg" alt="">
+	</div>
+	<div class="pane ">North</div>
+	<div class="pane ">South</div>
+	<div class="pane ui-layout-east"><textarea class="tinymce-full"> sd</textarea></div>
+	<div class="pane ui-layout-west"></div>
+</div>
+</body>
+</html>
